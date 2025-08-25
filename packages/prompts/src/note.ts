@@ -1,7 +1,7 @@
 import process from 'node:process';
 import type { Writable } from 'node:stream';
 import { stripVTControlCharacters as strip } from 'node:util';
-import { wrapAnsi } from 'fast-wrap-ansi';
+import { wrapAnsi, type Options as WrapAnsiOptions } from 'fast-wrap-ansi';
 import color from 'picocolors';
 import {
 	type CommonOptions,
@@ -17,16 +17,21 @@ export interface NoteOptions extends CommonOptions {
 	format?: (line: string) => string;
 }
 
+const wrapAnsiOpts: WrapAnsiOptions = {
+	hard: true,
+	trim: false,
+}
+
 const defaultNoteFormatter = (line: string): string => color.dim(line);
 
 const wrapWithFormat = (message: string, width: number, format: NoteOptions['format']): string => {
-	const wrapMsg = wrapAnsi(message, width).split('\n');
+	const wrapMsg = wrapAnsi(message, width, wrapAnsiOpts).split('\n');
 	const maxWidthNormal = wrapMsg.reduce((sum, ln) => Math.max(strip(ln).length, sum), 0);
 	const maxWidthFormat = wrapMsg
 		.map(format)
 		.reduce((sum, ln) => Math.max(strip(ln).length, sum), 0);
 	const wrapWidth = width - (maxWidthFormat - maxWidthNormal);
-	return wrapAnsi(message, wrapWidth);
+	return wrapAnsi(message, wrapWidth, wrapAnsiOpts);
 };
 
 export const note = (message = '', title = '', opts?: NoteOptions) => {
