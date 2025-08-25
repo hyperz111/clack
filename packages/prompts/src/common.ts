@@ -2,6 +2,7 @@ import type { Readable, Writable } from 'node:stream';
 import type { State } from '@clack/core';
 import isUnicodeSupported from 'is-unicode-supported';
 import color from 'picocolors';
+import { wrapAnsi } from 'fast-wrap-ansi';
 
 export const unicode = isUnicodeSupported();
 export const isCI = (): boolean => process.env.CI === 'true';
@@ -52,6 +53,32 @@ export const symbol = (state: State) => {
 			return color.green(S_STEP_SUBMIT);
 	}
 };
+
+export const wrapTitle = (message: string, state: State, width: number): string => {
+	let stateColor = 'gray';
+	
+	if (state === "initial" || state === "active") {
+		stateColor = 'cyan';
+	}
+	if (state === "error") {
+		stateColor = 'yellow';
+	}
+
+	let wrap = wrapAnsi(message, width - 3, {
+		hard: true,
+		trim: false,
+	});
+
+	wrap = wrap.split("\n").map((line, index) => {
+		if (index == 0) {
+			return `${symbol(state)}  ${line}`;
+		}
+
+		return `${color[stateColor](S_BAR)}  ${line}`;
+	})
+
+	return wrap.join("\n");
+}
 
 export interface CommonOptions {
 	input?: Readable;

@@ -7,7 +7,7 @@ import {
 	S_CHECKBOX_ACTIVE,
 	S_CHECKBOX_INACTIVE,
 	S_CHECKBOX_SELECTED,
-	symbol,
+	wrapTitle,
 } from './common.js';
 import { limitOptions } from './limit-options.js';
 import type { Option } from './select.js';
@@ -70,7 +70,7 @@ export const multiselect = <Value>(opts: MultiSelectOptions<Value>) => {
 				)}`;
 		},
 		render() {
-			const title = `${color.gray(S_BAR)}\n${symbol(this.state)}  ${opts.message}\n`;
+			const title = `${color.gray(S_BAR)}\n${wrapTitle(opts.message, this.state, this.output.columns)}\n`;
 			const value = this.value ?? [];
 
 			const styleOption = (option: Option<Value>, active: boolean) => {

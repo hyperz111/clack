@@ -8,7 +8,7 @@ import {
 	S_CHECKBOX_SELECTED,
 	S_RADIO_ACTIVE,
 	S_RADIO_INACTIVE,
-	symbol,
+	wrapTitle,
 } from './common.js';
 import { limitOptions } from './limit-options.js';
 import type { Option } from './select.js';
@@ -89,7 +89,7 @@ export const autocomplete = <Value>(opts: AutocompleteOptions<Value>) => {
 		validate: opts.validate,
 		render() {
 			// Title and message display
-			const title = `${color.gray(S_BAR)}\n${symbol(this.state)}  ${opts.message}\n`;
+			const title = `${color.gray(S_BAR)}\n${wrapTitle(opts.message, this.state, this.output.columns)}\n`;
 			const userInput = this.userInput;
 			const valueAsString = String(this.value ?? '');
 			const options = this.options;
@@ -241,7 +241,7 @@ export const autocompleteMultiselect = <Value>(opts: AutocompleteMultiSelectOpti
 		output: opts.output,
 		render() {
 			// Title and symbol
-			const title = `${color.gray(S_BAR)}\n${symbol(this.state)}  ${opts.message}\n`;
+			const title = `${color.gray(S_BAR)}\n${wrapTitle(opts.message, this.state, this.output.columns)}\n`;
 
 			// Selection counter
 			const userInput = this.userInput;

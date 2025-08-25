@@ -6,7 +6,7 @@ import {
 	S_BAR_END,
 	S_RADIO_ACTIVE,
 	S_RADIO_INACTIVE,
-	symbol,
+	wrapTitle,
 } from './common.js';
 import { limitOptions } from './limit-options.js';
 
@@ -81,7 +81,7 @@ export const select = <Value>(opts: SelectOptions<Value>) => {
 		output: opts.output,
 		initialValue: opts.initialValue,
 		render() {
-			const title = `${color.gray(S_BAR)}\n${symbol(this.state)}  ${opts.message}\n`;
+			const title = `${color.gray(S_BAR)}\n${wrapTitle(opts.message, this.state, this.output.columns)}\n`;
 
 			switch (this.state) {
 				case 'submit':
